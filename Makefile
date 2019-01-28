@@ -21,10 +21,10 @@ RANLIB=ranlib
 CUDA_INSTALL_PATH=/usr/local/cuda
 LDFLAGS=-L/usr/local/cuda/lib64 -lcudart
 NVCC=nvcc
-NVCCFLAGS=-lrt -lm -O2
+NVCCFLAGS= -ccbin g++ -m64 -gencode arch=compute_61,code=sm_61
 
 BIGFILES=-D_FILE_OFFSET_BITS=64
-#CFLAGS= -I. -I/usr/local/cuda/include/thrust_1_3 -I$(CUDA_INSTALL_PATH)/include -Wall -Winline -O2 -lrt -g $(BIGFILES) -fopenmp -lpthread
+#CFLAGS= -I. -I/usr/local/cuda/include/thrust -I$(CUDA_INSTALL_PATH)/include -Wall -Winline -O2 -lrt -g $(BIGFILES) -fopenmp -lpthread
 CFLAGS= -I. -Wall -Winline -O2 -lrt -g $(BIGFILES) -fopenmp -lpthread
 
 # Where you want it installed when you do 'make install'
@@ -42,7 +42,7 @@ OBJS= huffman.o    \
 all: libbz2.a bzip2 bzip2recover test
 
 bzip2: libbz2.a bzip2.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2 bzip2.o -L. -lbz2
+	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2 bzip2.o -L. -lbz2 -lcudart
 	
 bzip2recover: bzip2recover.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2recover bzip2recover.o
